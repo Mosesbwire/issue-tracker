@@ -3,6 +3,7 @@ const Schema = mongoose.Schema
 
 
 const UserSchema = new Schema({
+    
     firstname: {
         type: String,
         required: true
@@ -44,7 +45,7 @@ const UserSchema = new Schema({
         required: true
     }
 
-})
+}, {timestamps: true})
 
 
 UserSchema.virtual('fullname').get( ()=>{
