@@ -3,10 +3,12 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const config = require('config')
 const User = require('../models/User')
+const {  sendLoginLink } = require('../models/Mailer')
+const { trusted } = require('mongoose')
 const ROUNDS = 10
 
 
-const firstTimeLogin = [
+const loginViaLink = [
     check('password', 'Password can not be empty').not().isEmpty(),
     check('password', 'Password is too short').isLength({min:6}),
 
@@ -15,7 +17,7 @@ const firstTimeLogin = [
             if(!errors.isEmpty()){
                 return res.status(400).json({errors: errors.array()})
             }
-            //  first time login user is required to change password immediatly before
+            //  first time login user is required to change password immediatly when link is sent
         const { password } = req.body 
         try {
            
@@ -25,7 +27,7 @@ const firstTimeLogin = [
             const salt = await bcrypt.genSalt(ROUNDS)
             user.password = await bcrypt.hash(password, salt)
 
-            await user.save()
+            await user.save({timestamps: {createdAt: false, updatedAt: true}})
             const  payload = {
                 user: {
                     id: user.id
@@ -102,7 +104,7 @@ const login = [
 const isAuthenticated = async (req,res)=>{
     try {
         const user = await User.findById(req.user.id).select('-password')
-        res.josn(user)
+        res.json(user)
     } catch (err) {
         console.error(err.message)
         res.status(500).send('Server error')
@@ -110,8 +112,51 @@ const isAuthenticated = async (req,res)=>{
     }
 }
 
+const resetPassword = [
+    check('email', 'Email is required').isEmail(),
+
+    async(req,res)=>{
+        const errors = validationResult(req)
+        if(!errors.isEmpty()){
+            return res.json({errors: errors.array()})
+        }
+        const {email} = req.body
+        try {
+            const user = await User.findOne({email})
+            if(!user){
+                return res.status(400).json('User does not exist')
+            }
+
+            const payload = {
+                user: {
+                    id: user.id
+                }
+            }
+            
+            jwt.sign(
+                payload,
+                user.password,
+                {expiresIn: 3600},
+                (err,token)=>{
+                    if(err) throw err
+                    sendLoginLink(token,user.id, user.email, user.firstname)
+                    res.json({token})
+                }
+            )
+        } catch (err) {
+            console.error(err.message)
+            if(err.message === 'invalid signature'){
+                return res.status(400).json({msg: 'Token is expired or has already been used. Request new password reset link from your Admin'})
+            }
+            res.status(500).send('server error')
+        }
+        
+    }
+]
+
 module.exports = {
-    firstTimeLogin,
+    loginViaLink,
     login,
-    isAuthenticated
+    isAuthenticated,
+    resetPassword
 }
