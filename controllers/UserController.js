@@ -1,5 +1,5 @@
 const User = require('../models/User')
-const {sendFirstTimeLoginLink} = require('../models/Mailer')
+const {sendLoginLink} = require('../models/Mailer')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const {v4 : uuidv4 } = require('uuid')
@@ -36,10 +36,11 @@ const createUser = [
                 lastname,
                 email,
                 role,
+                createdBy: req.user.id,
                 password: await bcrypt.hash(generatedPassword, salt)
             })
         
-            await user.save()
+            await user.save({timestamps: {createdAt: true, updatedAt: false} })
 
             const payload = {
                 user: {
@@ -53,7 +54,7 @@ const createUser = [
                 {expiresIn: 3600},
                 (err,token)=>{
                     if(err) throw err
-                    sendFirstTimeLoginLink(token,user.id, user.email, user.firstname)
+                    sendLoginLink(token,user.id, user.email, user.firstname)
                     res.json({token})
                 }
             )
@@ -115,7 +116,7 @@ const editUser = [
             user.lastname = lastname || user.lastname
             user.email = email || user.email
 
-            await user.save()
+            await user.save({timestamps: {createdAt: false, updatedAt: true}})
 
             res.json(user)
         } catch (err) {

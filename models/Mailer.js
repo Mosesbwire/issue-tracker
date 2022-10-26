@@ -15,7 +15,7 @@ let transporter = nodemailer.createTransport({
     }
 })
 
-let sendFirstTimeLoginLink = async (token,secret, email, name)=>{
+let sendLoginLink = async (token,secret, email, name)=>{
     // the link will be to a server generated change password page
     // pass the token n the secret to the href in the link
     let content = `<b>
@@ -42,5 +42,5 @@ let sendFirstTimeLoginLink = async (token,secret, email, name)=>{
 
 }
 module.exports = {
-    sendFirstTimeLoginLink,
+    sendLoginLink,
 }
