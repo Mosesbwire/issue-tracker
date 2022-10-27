@@ -4,33 +4,38 @@ const Schema = mongoose.Schema
 const ProjectSchema = new Schema({
     title: {
         type: String,
+        required: true,
+        unique: true
+    },
+    description: {
+        type: String,
         required: true
     },
-    start_date: {
+    startDate: {
         type: Date,
         required: true
     },
-    target_end_date: {
+    targetEndDate: {
         type: Date,
         required: true
     },
-    actual_end_date: {
+    actualEndDate: {
         type: Date
     },
 
-    project_lead : {
+    projectLead : {
         type: Schema.Types.ObjectId, ref: 'User'
     },
 
-    created_by : {
+    createdBy : {
         type: Schema.Types.ObjectId, ref: 'User',
         required: true
     },
-    modified_by : {
+    modifiedBy : {
         type: Schema.Types.ObjectId, ref: 'User',
         
     },
-    modified_on: {
+    modifiedOn: {
         type: Date
     },
     members: [
@@ -40,3 +45,6 @@ const ProjectSchema = new Schema({
         {type: Schema.Types.ObjectId, ref: 'Issue'}
     ]
 }, {timestamps: true})
+
+
+module.exports = mongoose.model('Project', ProjectSchema)
