@@ -8,6 +8,7 @@ app.use(express.json({extended: false}))
 
 app.use('/api/users', require('./routes/UserRoutes'))
 app.use('/api/auth', require('./routes/AuthenticationRoute'))
+app.use('/api/project', require('./routes/ProjectRoutes'))
 
 const PORT = process.env.PORT || 5000
 
