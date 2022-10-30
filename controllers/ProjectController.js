@@ -1,5 +1,6 @@
 const Project = require('../models/Project')
 const User = require('../models/User')
+const Issue = require('../models/Issue')
 const { check, validationResult} = require('express-validator')
 const moment = require('moment')
 
@@ -63,7 +64,7 @@ const addMembers = [
             }
             
             members.map(async(member) => {
-               
+
                 if(member.role !== 'Manager' && member.project === undefined){
                     project.members.unshift(member)
                     const user = await User.findById(member._id)
@@ -78,6 +79,59 @@ const addMembers = [
             res.json(project.members)
 
         }catch(err){
+            console.error(err.message)
+            if(err.kind === 'ObjectId'){
+                return res.status(400).json({msg: 'Project does not exist'})
+            }
+            res.status(500).send('Server Error')
+        }
+    }
+]
+
+const removeMembers = [
+    check('members', 'Members field cannot be empty').not().isEmpty(),
+    async(req,res)=>{
+        const errors = validationResult(req)
+        if(!errors.isEmpty()){
+            return res.status(400).json({errors: errors.array()})
+        }
+        const { members  } = req.body
+        try {
+            const project = await Project.findById(req.params.id).populate('members', 'assignedIssue project ')
+            if(!project){
+                return res.status(400).json({msg: 'Project does not exist'})
+            }
+
+            members.map(async (member) => {
+                let idx;
+               
+                project.members.map(async(currentMember,index)=>{
+                    
+                    if(member === currentMember._id.toString()){
+                    
+                        idx = index
+                        const issue = await Issue.findById(currentMember.assignedIssue)
+                        
+                        if(issue){
+                           
+                            issue.assignedTo = undefined
+                            if(issue.status === 'Open') issue.status = 'Unassigned'
+                            await issue.save({timestamps: {createdAt: false, updatedAt: true}})
+                        }
+                        const user = await User.findById(currentMember._id)
+                        if(user.assignedIssue) user.assignedIssue = undefined
+                        if(user.project) user.project = undefined
+                        await user.save({timestamps: {createdAt: false, updatedAt: true}})
+
+                    }
+        
+                })
+               project.members.splice(idx,1)
+            })
+           
+            await project.save({timestamps: {createdAt: false, updatedAt: true}})
+            res.json(project)
+        } catch (err) {
             console.error(err.message)
             if(err.kind === 'ObjectId'){
                 return res.status(400).json({msg: 'Project does not exist'})
@@ -218,6 +272,7 @@ const getProject = async(req,res)=> {
 module.exports = {
     createProject,
     addMembers,
+    removeMembers,
     assignProjectLead,
     editProject,
     closeProject,
