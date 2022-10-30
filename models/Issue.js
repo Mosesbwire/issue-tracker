@@ -43,7 +43,7 @@ const IssueSchema = new Schema({
     },
     targetResolutionDate: {
         type: Date,
-        required: true
+
     },
     actualResolutionDate: {
         type: Date
