@@ -1,4 +1,5 @@
 const { check, validationResult} = require('express-validator')
+const mongoose = require('mongoose')
 const Issue = require('../models/Issue')
 const Project = require('../models/Project')
 const User = require('../models/User')
@@ -82,6 +83,7 @@ const assignIssue = [
         try{
             let issue = await Issue.findById(req.params.id)
             let issueAssignee = await User.findById(assignedTo)
+
             if(!issue){
                 return res.status(400).json({msg: 'Issue does not exist'})
             }
@@ -89,11 +91,22 @@ const assignIssue = [
             if(!issueAssignee){
                 return res.status(400).json({msg: 'The user assigned this issue does not exist'})
             }
+
+            if(!issueAssignee.project){
+                return res.status(400).json({msg: 'This user has not been added to the project. Kindly add user to project the assign user the issue'})
+            }
+
+            if(issueAssignee.project && issueAssignee.project.toString() !== issue.project.toString() ){
+                return res.status(400).json({msg: 'This user does not belong to this project. Assign issue to a project member'})
+            }
+           
             if(issue.assignedTo){
                 const currentAssignee = await User.findById(issue.assignedTo)
                 currentAssignee.assignedIssue = undefined
                 await currentAssignee.save({timestamps: false})
             }
+
+
 
             issue.assignedTo = assignedTo
             issue.status = 'Open'
@@ -243,12 +256,57 @@ const getAllIssues = async(req,res)=>{
         res.status(500).send('Server Error')
     }
 }
+
+const deleteIssue = async(req,res)=> {
+    try {
+        const issue = await Issue.findById(req.params.id)
+        const project = await Project.findById(issue.project)
+        if(!issue){
+            return res.status(400).json({msg: 'Issue does not exist'})
+        }
+
+        if(project.createdBy.toString() !== req.user.id ){
+            return res.status(400).json({msg: 'You are not authorized to perform this action'})
+        }
+
+        if(project.projectLead && project.projectLead.toString() !== req.user.id){
+            return res.status(400).json({msg: 'You are not authorized to perform this action'})
+        }
+
+        if(issue.status === 'Closed'){
+            return res.status(400).json({msg: 'This issue has been marked closed. Cannot be deleted.'})
+        }
+
+        if(issue.assignedTo){
+            const user = await User.findById(issue.assignedTo)
+            user.assignedIssue = undefined
+            await user.save({timestamps: false})
+        }
+
+        const index = project.issues.indexOf(mongoose.Types.ObjectId(req.params.id))
+        project.issues.splice(index,1)
+
+        await project.save({timestamps: false})
+
+        await Issue.findByIdAndDelete(req.params.id)
+
+        res.json({msg: 'Issue successfully deleted'})
+        
+    } catch (err) {
+        console.error(err.message)
+        if(err.kind === 'ObjectId'){
+            return res.status(400).json({msg: 'Issue does not exist'})
+        }
+        res.status(500).send('Server Error')
+    }
+}
 module.exports = {
     createIssue,
     assignIssue,
     editIssue,
     closeIssue,
     getIssue,
-    getAllIssues
+    getAllIssues,
+    deleteIssue
 }
 

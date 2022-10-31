@@ -3,6 +3,7 @@ const User = require('../models/User')
 const Issue = require('../models/Issue')
 const { check, validationResult} = require('express-validator')
 const moment = require('moment')
+const { findById } = require('../models/Project')
 
 const createProject = [
     check('title', 'Title is required').not().isEmpty(),
@@ -269,6 +270,45 @@ const getProject = async(req,res)=> {
     }
 }
 
+const deleteProject = async(req,res)=>{
+
+    try {
+        const project = await Project.findById(req.params.id).populate('members', 'assignedIssue project')
+        
+        if(!project){
+            return res.status(400).json({msg: 'Project does not exist'})
+        }
+
+        if(project.createdBy.toString() !== req.user.id){
+            return res.status(401).json({msg: 'You are not authorized to perform this action.'})
+        }
+
+        const members = project.members
+        const issues = project.issues
+
+        members.map(async(member)=>{
+            member.assignedIssue = undefined
+            member.project = undefined
+            await member.save({timestamps: {createdAt: false, updatedAt: true}})
+        })
+
+        issues.map(async(issue)=>{
+            await Issue.findByIdAndDelete(issue)
+        })
+
+        await Project.findByIdAndDelete(req.params.id)
+
+        res.json({msg: 'Project successfully deleted'})
+        
+    } catch (err) {
+        console.error(err.message)
+        if(err.kind === 'ObjectId'){
+            return res.status(400).json({msg: 'Project does not exist'})
+        }
+        res.status(500).send('Server Error')
+    }
+}
+
 module.exports = {
     createProject,
     addMembers,
@@ -277,5 +317,6 @@ module.exports = {
     editProject,
     closeProject,
     getAllProjects,
-    getProject
+    getProject,
+    deleteProject
 }

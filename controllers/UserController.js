@@ -1,4 +1,7 @@
 const User = require('../models/User')
+const Project = require('../models/Project')
+const Issue = require('../models/Issue')
+const mongoose = require('mongoose')
 const {sendLoginLink} = require('../models/Mailer')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
@@ -130,7 +133,42 @@ const editUser = [
     }
 ]
 
-// add delete user --- delete user and remove user ref from projects and issues that are active
+const deleteUser = async(req,res)=>{
+    try {
+        const user = await User.findById(req.params.id)
+        if(!user){
+            return res.status(400).json({msg: 'User not found'})
+        }
+        if(user.createdBy.toString() !== req.user.id){
+            return res.status(400).json({msg: 'You are not authorized to perform this function'})
+        }
+
+        if(user.assignedIssue){
+            const issue = await Issue.findById(user.assignedIssue)
+            issue.assignedTo = undefined
+            issue.status = 'Unassigned'
+            await issue.save({timestamps: false})
+        }
+
+        if(user.project){
+
+            const project = await Project.findById(user.project)
+            const index = project.members.indexOf(mongoose.Types.ObjectId(req.params.id))
+            project.members.splice(index,1)
+            project.save({timestamps: false})
+        }
+
+        await User.findByIdAndDelete(req.params.id)
+
+        res.json({msg: 'User successfully deleted'})
+    } catch (err) {
+        console.error(err.message)
+        if(err.kind === 'ObjectId'){
+            return res.status(400).json({msg: 'User does not exist'})
+        }
+        res.status(500).send('Server Error')
+    }
+}
 
 //  add change role functionality
 
@@ -142,6 +180,7 @@ module.exports = {
     createUser,
     allUsers,
     getUser,
-    editUser
+    editUser,
+    deleteUser
 }
 

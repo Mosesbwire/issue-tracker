@@ -8,7 +8,8 @@ const {
     editProject,
     closeProject,
     getAllProjects,
-    getProject
+    getProject,
+    deleteProject
 } = require('../controllers/ProjectController')
 
 
@@ -22,6 +23,7 @@ ProjectRouter.put('/edit/:id', authenticate, authorizePeopleManagement, editProj
 ProjectRouter.put('/close/:id', authenticate, authorizePeopleManagement, closeProject)
 ProjectRouter.get('/', authenticate, getAllProjects)
 ProjectRouter.get('/:id', authenticate, getProject)
+ProjectRouter.delete('/delete/:id', authenticate, authorizePeopleManagement,deleteProject)
 
 
 module.exports = ProjectRouter
