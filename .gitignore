@@ -106,3 +106,5 @@ dist
 #config defaults
 
 config/default.json
+
+design/
