@@ -1,22 +1,28 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useEffect } from 'react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import { Provider } from 'react-redux';
 import './App.css';
+import store from './store'
 import Navbar from './components/layout/Navbar';
 import Login from './components/auth/Login';
 import ResetPassword from './components/auth/ResetPassword';
 import SetPassword from './components/auth/SetPassword';
 
+
+
 const App = ()=> 
-  <Router>
-    <Fragment>
-      <Navbar/>
-      <Routes>
-        <Route path='/' element={<Login/>}/>
-        <Route path='/reset-password' element={<ResetPassword/>}/>
-        <Route path= '/set-password' element={<SetPassword/>}/>
-      </Routes>
-    </Fragment>
-  </Router>
+  <Provider store={store}>
+    <Router>
+      <Fragment>
+        <Navbar/>
+        <Routes>
+          <Route path='/' element={<Login/>}/>
+          <Route path='/reset-password' element={<ResetPassword/>}/>
+          <Route path= '/set-password' element={<SetPassword/>}/>
+        </Routes>
+      </Fragment>
+    </Router>
+  </Provider>
 
 
 export default App;
