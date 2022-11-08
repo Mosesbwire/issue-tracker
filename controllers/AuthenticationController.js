@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs')
 const config = require('config')
 const User = require('../models/User')
 const {  sendLoginLink } = require('../models/Mailer')
-const { trusted } = require('mongoose')
+
 const ROUNDS = 10
 
 
@@ -124,7 +124,7 @@ const resetPassword = [
         try {
             const user = await User.findOne({email})
             if(!user){
-                return res.status(400).json('User does not exist')
+                return res.status(400).json({errors: [{msg: 'User does not exist'}]})
             }
 
             const payload = {
@@ -140,14 +140,12 @@ const resetPassword = [
                 (err,token)=>{
                     if(err) throw err
                     sendLoginLink(token,user.id, user.email, user.firstname)
-                    res.json({token})
+                    res.json('Ok')
                 }
             )
         } catch (err) {
             console.error(err.message)
-            if(err.message === 'invalid signature'){
-                return res.status(400).json({msg: 'Token is expired or has already been used. Request new password reset link from your Admin'})
-            }
+            
             res.status(500).send('server error')
         }
         
