@@ -5,6 +5,8 @@
     --primary-dark: #466443;
     --primary-light: #D6E6D5;
     --primary-text: #133F46;
+    --danger-color: #dc3545;
+    --success-color: #28a745;
 }
 
 /* Box sizing rules */
@@ -96,6 +98,14 @@ a {
     scroll-behavior: auto !important;
   }
 }
+
+.alert {
+    padding: 0.8rem;
+    margin: 1rem 0;
+    opacity: 0.9;
+    background: var(--bg-light);
+    color: var(--primary-text);
+  }
 
 .container {
     width: 90%;
