@@ -3,15 +3,23 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { Provider } from 'react-redux';
 import './App.css';
 import store from './store'
+import { loadUser } from './actions/auth'
+import setAuthToken from './utils/setAuthToken'
 import Navbar from './components/layout/Navbar';
 import Alert from './components/layout/Alert';
 import Login from './components/auth/Login';
 import ResetPassword from './components/auth/ResetPassword';
 import SetPassword from './components/auth/SetPassword';
 
+if(localStorage.token){
+  setAuthToken(localStorage.token)
+}
 
-
-const App = ()=> 
+const App = ()=> {
+  useEffect(()=>{
+    store.dispatch(loadUser())
+  }, [])
+  return (
   <Provider store={store}>
     <Router>
       <Fragment>
@@ -25,6 +33,8 @@ const App = ()=>
       </Fragment>
     </Router>
   </Provider>
+
+)}
 
 
 export default App;

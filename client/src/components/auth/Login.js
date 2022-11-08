@@ -1,19 +1,36 @@
-import React from 'react'
+import React, {useState} from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
-const Login = props => {
+import { Link, Navigate } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { login } from '../../actions/auth'
+const Login = ({login, isAuthenticated}) => {
+    const [formData, setFormData] = useState({
+        email: '',
+        password: ''
+    })
+
+    const {email, password } = formData
+    const onChange = e => setFormData({...formData, [e.target.name]: e.target.value})
+    const onSubmit = async e => {
+        e.preventDefault()
+        login({email, password})
+    }
+
+    if(isAuthenticated){
+        console.log('Authentication passed.. redirecting to dashboard')
+    }
   return (
     <div className="login">
         <div className="container wrapper auth-form">
             <h1 className="primary-heading text">Welcome to Issue Tracker.</h1>
-            <form action="" method="post">
+            <form onSubmit={e => onSubmit(e)}>
                 <div className="form-group">
                     <label for="email">Email</label>
-                    <input type="email" name="email" id=""/>
+                    <input type="email" name="email" id="" value={email} onChange={e => onChange(e)} required/>
                 </div>
                 <div className="form-group">
                     <label for="password">Password</label>
-                    <input type="password" name="password" id=""/>
+                    <input type="password" name="password" id="" minLength="6" value={password} onChange= {e => onChange(e)} required/>
                 </div>
                 <div className="form-group">
                     <button className="btn-primary" type="submit" >Login</button>
@@ -26,7 +43,12 @@ const Login = props => {
 }
 
 Login.propTypes = {
-
+    login: PropTypes.func.isRequired,
+    isAuthenticated: PropTypes.bool,
 }
 
-export default Login
+const mapStateToProps = state =>({
+    isAuthenticated: state.auth.isAuthenticated
+})
+
+export default connect(mapStateToProps, {login})(Login)
