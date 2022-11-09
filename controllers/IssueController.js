@@ -96,6 +96,10 @@ const assignIssue = [
                 return res.status(400).json({msg: 'This user has not been added to the project. Kindly add user to project the assign user the issue'})
             }
 
+            if(issueAssignee.role === 'Manager'){
+                return res.status(400).json({msg: 'Manager cannot be assigned issues'})
+            }
+
             if(issueAssignee.project && issueAssignee.project.toString() !== issue.project.toString() ){
                 return res.status(400).json({msg: 'This user does not belong to this project. Assign issue to a project member'})
             }
