@@ -10,6 +10,7 @@ import Alert from './components/layout/Alert';
 import Login from './components/auth/Login';
 import ResetPassword from './components/auth/ResetPassword';
 import SetPassword from './components/auth/SetPassword';
+import Dashboard from './components/dashboard/Dashboard';
 
 if(localStorage.token){
   setAuthToken(localStorage.token)
@@ -29,6 +30,7 @@ const App = ()=> {
           <Route path='/' element={<Login/>}/>
           <Route path='/reset-password' element={<ResetPassword/>}/>
           <Route path= '/set-password' element={<SetPassword/>}/>
+          <Route path= '/dashboard' element={<Dashboard/>}/>
         </Routes>
       </Fragment>
     </Router>

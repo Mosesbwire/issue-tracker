@@ -17,7 +17,7 @@ const Login = ({login, isAuthenticated}) => {
     }
 
     if(isAuthenticated){
-        console.log('Authentication passed.. redirecting to dashboard')
+        return <Navigate to='/dashboard'/>
     }
   return (
     <div className="login">
