@@ -231,6 +231,21 @@ body{
     display: flex;
     justify-content: space-between;
 }
+.nav-items {
+    display: flex;   
+}
+
+
+.nav-link {
+    color: var(--primary-text);
+    display: block;
+    margin-right: 4.5em;
+    cursor: pointer;
+}
+
+.nav-link:hover {
+    color: var(--primary-dark);
+}
 
 .aside {
     padding-block: 2em;
