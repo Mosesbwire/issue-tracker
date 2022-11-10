@@ -29,7 +29,7 @@ const ProjectSchema = new Schema({
 
     createdBy : {
         type: Schema.Types.ObjectId, ref: 'User',
-        required: true
+        
     },
     modifiedBy : {
         type: Schema.Types.ObjectId, ref: 'User',

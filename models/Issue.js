@@ -21,6 +21,9 @@ const IssueSchema = new Schema({
         type: Date,
         required: true 
     },
+    assignedOn: {
+        type: Date
+    },
     project: {
         type: Schema.Types.ObjectId, ref: 'Project',
         required: true
@@ -39,13 +42,16 @@ const IssueSchema = new Schema({
     priority: {
         type: String,
         enum: ['High', 'Medium', 'Low'],
-        required: true
+        default: 'Low'
     },
     targetResolutionDate: {
         type: Date,
 
     },
     actualResolutionDate: {
+        type: Date
+    },
+    assignedOn: {
         type: Date
     }
 }, {timestamps: true})
