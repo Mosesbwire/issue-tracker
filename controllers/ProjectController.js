@@ -248,7 +248,7 @@ const editProject = [
 
 const getAllProjects = async(req,res)=> {
     try {
-        const projects = await Project.find({})
+        const projects = await Project.find({}).populate('members').populate('issues').populate('createdBy').populate('projectLead')
         res.json(projects)
     } catch (err) {
         console.error(err.message)
@@ -258,7 +258,7 @@ const getAllProjects = async(req,res)=> {
 
 const getProject = async(req,res)=> {
     try {
-        const project = await Project.findById(req.params.id)
+        const project = await Project.findById(req.params.id).populate('members').populate('issues')
         if(!project){
             return res.status(400).json({msg: 'Project does not exist'})
         }
