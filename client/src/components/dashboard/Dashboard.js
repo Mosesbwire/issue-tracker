@@ -1,23 +1,27 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React, { Fragment } from 'react'
+import PropTypes  from 'prop-types'
 import { connect } from 'react-redux'
 import Aside from './Aside'
 
-const Dashboard = ({user}) => {
-  return (
-    <main className='grid-container'>
-        
-      <Aside user={user}/>
-    </main>
-  )
+const Dashboard = ({auth: {user, loading}}) => {
+  
+  return loading && user === null ? <p>Loading</p> : <Fragment>
+        <main className='grid-container'>
+
+          <Aside user={user}/>
+        </main>
+    </Fragment>
+    
+  
 }
 
 Dashboard.propTypes = {
-    user: PropTypes.object.isRequired,
+  auth: PropTypes.object.isRequired,
 }
 
 const mapStateToProps = state => ({
-    user: state.auth.user
+  auth: state.auth
 })
+
 
 export default connect(mapStateToProps)(Dashboard)

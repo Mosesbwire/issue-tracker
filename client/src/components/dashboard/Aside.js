@@ -1,16 +1,17 @@
 import React,{Fragment} from 'react'
 import PropTypes from 'prop-types'
 
-const Aside = (prop) => {
+const Aside = ({user}) => {
+    
   return (
     <Fragment>
         <aside className="aside">
             <div className="container aside-wrapper text">
                     <div className="space-between aside-item">
                         <p><i className="fa-solid fa-user aside-ic"></i>User</p>
-                        <p>{`${prop.user.firstname} ${prop.user.lastname}`}</p>
+                        <p>{`${user.firstname} ${user.lastname}`}</p>
                     </div>
-                    {prop.user.role !== 'Manager' && (<Fragment>
+                    {user.role !== 'Manager' && (<Fragment>
                         <div className="space-between aside-item">
                             <p><i className="fa-solid fa-diagram-project aside-ic"></i>Project</p>
                             <p>Node Backend</p>
@@ -33,7 +34,9 @@ const Aside = (prop) => {
 }
 
 Aside.propTypes = {
-
+    user: PropTypes.object.isRequired,
 }
+
+
 
 export default Aside
