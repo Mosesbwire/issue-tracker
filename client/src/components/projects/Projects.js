@@ -1,8 +1,10 @@
 import React, {useEffect, Fragment} from 'react'
 import PropTypes from 'prop-types'
 import { connect } from "react-redux";
+import { Link } from 'react-router-dom';
 import ProjectItem from './ProjectItem'
 import { getProjects } from '../../actions/project'
+
 
 
 
@@ -13,7 +15,7 @@ const Project = ({getProjects, project:{loading, projects},user}) => {
   return loading && user === null ? <p>Loading...</p> : <Fragment>
         <main>
             <div className="projects container">
-            {user.role === 'Manager' && ( <button className="btn-primary project-btn">New Project</button>)}
+            {user.role === 'Manager' && (<Link to= '/project/new'><button className="btn-primary project-btn">New Project</button></Link> )}
            
             <div className="projects-wrapper">
                     <div className="project-heading projects-grid">

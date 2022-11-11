@@ -1,4 +1,4 @@
-import { GET_PROJECT, GET_PROJECTS, PROJECT_ERROR, CREATE_PROJECT, UPDATE_PROJECT, DELETE_PROJECT } from './types';
+import { GET_PROJECT, GET_PROJECTS, PROJECT_ERROR, CREATE_PROJECT, UPDATE_PROJECT, DELETE_PROJECT, CLEAR_PROJECT } from './types';
 import { setAlert } from './alert'
 import axios from 'axios';
 
@@ -40,6 +40,10 @@ export const createProject = (formData)=> async dispatch => {
             'Content-Type': 'application/json'
         }
     }
+
+    dispatch({
+        type: CLEAR_PROJECT
+    })
 
     try {
         const res = await axios.post('/api/project', formData, config)

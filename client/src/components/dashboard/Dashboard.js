@@ -5,7 +5,7 @@ import Aside from './Aside'
 
 const Dashboard = ({auth: {user, loading}}) => {
   
-  return loading && user === null ? <p>Loading</p> : <Fragment>
+  return user === null ? <p>Loading</p> : <Fragment>
         <main className='grid-container'>
 
           <Aside user={user}/>

@@ -6,7 +6,8 @@ import {
     CREATE_PROJECT,
     UPDATE_PROJECT,
     DELETE_PROJECT,
-    PROJECT_ERROR
+    PROJECT_ERROR,
+    CLEAR_PROJECT
 } from '../actions/types'
 
 const initialState = {
@@ -15,7 +16,8 @@ const initialState = {
     loading: true,
     members: [],
     issues: [],
-    error: {}
+    error: {},
+    isCreated: false
 }
 
 
@@ -50,7 +52,13 @@ export default function(state = initialState, action){
                 ...state,
                 project: payload,
                 projects: [payload,...state.projects],
-                loading: false
+                loading: false,
+                isCreated: true
+            }
+        case CLEAR_PROJECT:
+            return {
+                ...state,
+                project: null
             }
         case DELETE_PROJECT:
             return {

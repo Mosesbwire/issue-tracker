@@ -25,11 +25,11 @@ const Login = ({login, isAuthenticated}) => {
             <h1 className="primary-heading text">Welcome to Issue Tracker.</h1>
             <form onSubmit={e => onSubmit(e)}>
                 <div className="form-group">
-                    <label for="email">Email</label>
+                    <label htmlFor="email">Email</label>
                     <input type="email" name="email" id="" value={email} onChange={e => onChange(e)} required/>
                 </div>
                 <div className="form-group">
-                    <label for="password">Password</label>
+                    <label htmlFor="password">Password</label>
                     <input type="password" name="password" id="" minLength="6" value={password} onChange= {e => onChange(e)} required/>
                 </div>
                 <div className="form-group">
