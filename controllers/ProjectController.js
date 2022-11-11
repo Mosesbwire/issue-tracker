@@ -258,7 +258,7 @@ const getAllProjects = async(req,res)=> {
 
 const getProject = async(req,res)=> {
     try {
-        const project = await Project.findById(req.params.id).populate('members').populate('issues')
+        const project = await Project.findById(req.params.id).populate('members').populate('issues').populate('createdBy').populate('projectLead')
         if(!project){
             return res.status(400).json({msg: 'Project does not exist'})
         }
