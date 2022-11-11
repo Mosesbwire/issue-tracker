@@ -6,14 +6,15 @@ import { getProjects } from '../../actions/project'
 
 
 
-const Project = ({getProjects, project:{loading, projects}}) => {
+const Project = ({getProjects, project:{loading, projects},user}) => {
     useEffect(()=>{
         getProjects()
     }, [getProjects])
-  return loading ? <p>Loading...</p> : <Fragment>
+  return loading && user === null ? <p>Loading...</p> : <Fragment>
         <main>
             <div className="projects container">
-            <button className="btn-primary project-btn">New Project</button>
+            {user.role === 'Manager' && ( <button className="btn-primary project-btn">New Project</button>)}
+           
             <div className="projects-wrapper">
                     <div className="project-heading projects-grid">
                         <p>Title</p>
@@ -40,11 +41,13 @@ const Project = ({getProjects, project:{loading, projects}}) => {
 
 Project.propTypes = {
     project: PropTypes.object.isRequired,
+    user: PropTypes.object.isRequired,
     getProjects: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
-    project: state.project
+    project: state.project,
+    user: state.auth.user
 })
 
 export default connect(mapStateToProps, {getProjects})(Project)
