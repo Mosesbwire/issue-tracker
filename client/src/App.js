@@ -8,6 +8,8 @@ import setAuthToken from './utils/setAuthToken'
 import Navbar from './components/layout/Navbar';
 import Alert from './components/layout/Alert';
 import Login from './components/auth/Login';
+import PrivateRoute from './components/routing/PrivateRoute';
+import AuthorizedRoute from './components/routing/AuthorizedRoute';
 import ResetPassword from './components/auth/ResetPassword';
 import SetPassword from './components/auth/SetPassword';
 import Dashboard from './components/dashboard/Dashboard';
@@ -33,10 +35,10 @@ const App = ()=> {
           <Route path='/' element={<Login/>}/>
           <Route path='/reset-password' element={<ResetPassword/>}/>
           <Route path= '/set-password' element={<SetPassword/>}/>
-          <Route path= '/dashboard' element={<Dashboard/>}/>
-          <Route path= '/projects' element={<Projects/>}/>
-          <Route path= '/project/new' element={<ProjectForm/>}/>
-          <Route path= '/project/:id' element={<Project/>}/>
+          <Route path= '/dashboard' element={<PrivateRoute><Dashboard/></PrivateRoute>}/>
+          <Route path= '/projects' element={<PrivateRoute><Projects/></PrivateRoute>}/>
+          <Route path= '/project/new' element={<AuthorizedRoute><ProjectForm/></AuthorizedRoute>}/>
+          <Route path= '/project/:id' element={<PrivateRoute><Project/></PrivateRoute>}/>
 
         </Routes>
       </Fragment>
