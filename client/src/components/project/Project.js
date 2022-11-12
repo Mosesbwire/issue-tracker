@@ -7,13 +7,14 @@ import ProjectActions from './ProjectActions'
 import ProjectMetrics from './ProjectMetrics'
 import ProjectDetails from './ProjectDetails'
 import ProjectMembers from './ProjectMembers'
+import Spinner from '../layout/Spinner'
 
 const Project = ({getProject, project: {project, loading, members, issues}}) => {
     const { id } = useParams()
     useEffect(()=>{
         getProject(id)
     }, [getProject, id])
-  return project === null ? <p>Loading...</p> : <Fragment>
+  return project === null ? <Spinner/> : <Fragment>
     <main className='container'>
     
       <ProjectActions/>

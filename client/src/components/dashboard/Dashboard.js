@@ -2,10 +2,11 @@ import React, { Fragment } from 'react'
 import PropTypes  from 'prop-types'
 import { connect } from 'react-redux'
 import Aside from './Aside'
+import Spinner from '../layout/Spinner'
 
 const Dashboard = ({auth: {user, loading}}) => {
   
-  return user === null ? <p>Loading</p> : <Fragment>
+  return user === null ? <Spinner/> : <Fragment>
         <main className='grid-container'>
 
           <Aside user={user}/>
