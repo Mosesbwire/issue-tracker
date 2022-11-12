@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import Moment from 'react-moment'
 
 const ProjectDetails = ({project}) => {
-  return (
+  return <Fragment>
+
     <div className="full-description">
         <div className="project-timeline space-between">
             <div>
@@ -39,7 +40,8 @@ const ProjectDetails = ({project}) => {
             </div>
         </div>
     </div>
-  )
+  </Fragment>
+  
 }
 
 ProjectDetails.propTypes = {

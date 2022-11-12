@@ -13,9 +13,9 @@ const Project = ({getProject, project: {project, loading, members, issues}}) => 
     useEffect(()=>{
         getProject(id)
     }, [getProject, id])
-  return loading && project === null ? <p>Loading...</p> : <Fragment>
-
+  return project === null ? <p>Loading...</p> : <Fragment>
     <main className='container'>
+    
       <ProjectActions/>
       <ProjectMetrics issues={issues}/>
       <div className='lower-section'>

@@ -39,7 +39,6 @@ const App = ()=> {
           <Route path= '/projects' element={<PrivateRoute><Projects/></PrivateRoute>}/>
           <Route path= '/project/new' element={<AuthorizedRoute><ProjectForm/></AuthorizedRoute>}/>
           <Route path= '/project/:id' element={<PrivateRoute><Project/></PrivateRoute>}/>
-
         </Routes>
       </Fragment>
     </Router>
