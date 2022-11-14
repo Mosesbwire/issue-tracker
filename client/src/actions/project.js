@@ -185,6 +185,7 @@ export const editProject = (formData, projectId) => async dispatch=> {
 export const closeProject = (projectId) => async dispatch => {
     try {
         const res = await axios.put(`/api/project/close/${projectId}`)
+        
         dispatch({
             type: UPDATE_PROJECT,
             payload: res.data
@@ -192,6 +193,11 @@ export const closeProject = (projectId) => async dispatch => {
 
         dispatch(setAlert('Project successfully closed', 'success'))
     } catch (err) {
+        
+        const errors = err.response.data.errors
+        if(errors){
+            errors.forEach(error => dispatch(setAlert(error.msg, 'danger')))
+        }
         dispatch({
             type: PROJECT_ERROR,
             payload: {msg: err.response.statusText, status: err.response.status}
@@ -200,12 +206,12 @@ export const closeProject = (projectId) => async dispatch => {
 }
 
 export const deleteProject = (projectId) => async dispatch => {
-    if(window.confirm('Are you sure? This process cannot be undone.')){
+
         try {
             const res = await axios.delete(`/api/project/delete/${projectId}`)
             dispatch({
                 type: DELETE_PROJECT,
-                payload: res.data
+                payload: projectId
             })
 
             dispatch(setAlert('Project removed.', 'success'))
@@ -215,5 +221,5 @@ export const deleteProject = (projectId) => async dispatch => {
                 payload: {msg: err.response.statusText, status: err.response.status}
             })
         }
-    }
+    
 }

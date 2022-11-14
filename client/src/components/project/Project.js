@@ -1,6 +1,6 @@
 import React, {useEffect, Fragment} from 'react'
 import PropTypes from 'prop-types'
-import { useParams } from 'react-router-dom'
+import { useParams, Navigate } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { getProject } from '../../actions/project'
 import ProjectActions from './ProjectActions'
@@ -14,6 +14,10 @@ const Project = ({getProject, project: {project, loading, members, issues}}) => 
     useEffect(()=>{
         getProject(id)
     }, [getProject, id])
+
+    if(!loading && project === null ){
+      return <Navigate to ='/projects'/>
+    }
   return project === null ? <Spinner/> : <Fragment>
     <main className='container'>
     

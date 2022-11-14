@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { Link } from 'react-router-dom';
 import ProjectItem from './ProjectItem'
 import { getProjects } from '../../actions/project'
+import Spinner from '../layout/Spinner';
 
 
 
@@ -12,7 +13,7 @@ const Project = ({getProjects, project:{loading, projects},user}) => {
     useEffect(()=>{
         getProjects()
     }, [getProjects])
-  return loading && user === null ? <p>Loading...</p> : <Fragment>
+  return loading && user === null ? <Spinner/> : <Fragment>
         <main>
             <div className="projects container">
             {user.role === 'Manager' && (<Link to= '/project/new'><button className="btn-primary project-btn">New Project</button></Link> )}
@@ -27,7 +28,8 @@ const Project = ({getProjects, project:{loading, projects},user}) => {
                         <p>Actions</p>
                     </div>
                     <div className="project-container">
-                        {projects.length === 0 ? <p>You currently have no projects</p> : <Fragment>
+                        {projects.length === 0 && !loading &&( <p>You currently have no projects</p>)}
+                        {projects.length === 0 && loading ? <Spinner/> : <Fragment>
                             {projects.map(project => (
                                 <ProjectItem key={project._id} project={project}/>
                             ))}

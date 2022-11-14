@@ -6,6 +6,7 @@ const ProjectDetails = ({project}) => {
   return <Fragment>
 
     <div className="full-description">
+        <small>STATUS: {project.actualEndDate ? 'CLOSED': 'OPEN'}</small>
         <div className="project-timeline space-between">
             <div>
                 <p>Start Date</p>
@@ -21,8 +22,7 @@ const ProjectDetails = ({project}) => {
             <p>{project.title}</p>
         </div>
         <div className="project-identifier">
-            <p>{project.description}</p>
-            <p className="project-description">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dignissimos eos voluptas rerum culpa ducimus, neque fuga doloremque praesentium ipsa, porro amet nobis sapiente earum quia, cum facere consequatur asperiores aspernatur. Quod velit atque, voluptas dolor facilis consequatur adipisci quo deserunt aliquam nisi dignissimos illum reprehenderit, iure vitae sit esse quos tempore! Adipisci blanditiis maiores debitis inventore ipsa pariatur libero rerum laborum ab itaque, quia aperiam aliquam sunt laudantium corporis eaque.</p>
+            <p className='project-description'>{project.description}</p>
         </div>
         <div className="owners">
             <div className="space-between">
