@@ -16,6 +16,7 @@ import Dashboard from './components/dashboard/Dashboard';
 import Projects from './components/projects/Projects';
 import Project from './components/project/Project'
 import ProjectForm from './components/projects/ProjectForm'
+import Users from './components/users/Users';
 
 if(localStorage.token){
   setAuthToken(localStorage.token)
@@ -39,6 +40,7 @@ const App = ()=> {
           <Route path= '/projects' element={<PrivateRoute><Projects/></PrivateRoute>}/>
           <Route path= '/project/new' element={<AuthorizedRoute><ProjectForm/></AuthorizedRoute>}/>
           <Route path= '/project/:id' element={<PrivateRoute><Project/></PrivateRoute>}/>
+          <Route path= '/users' element={<PrivateRoute><Users/></PrivateRoute>}/>
         </Routes>
       </Fragment>
     </Router>

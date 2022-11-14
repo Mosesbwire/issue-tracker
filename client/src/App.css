@@ -350,6 +350,8 @@ body{
     margin-top: 1em;
 }
 
+
+
 .projects-grid {
     display: grid;
     grid-template-columns: 30% 14% 14% 14% 14% 14% ;
