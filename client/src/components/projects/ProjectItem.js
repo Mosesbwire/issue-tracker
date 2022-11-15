@@ -16,7 +16,7 @@ const ProjectItems = ({deleteProject, auth: {loading , user}, project: {_id,titl
                 {projectLead === undefined ? <p>Admin</p> : (<p>{projectLead.firstname}</p>)}
                 {createdBy !== undefined && createdBy._id === user._id && (
                     <div className="project-actions">
-                        <i className="fa-solid fa-trash"></i>
+                        <i className="fa-solid fa-trash" onClick={e=> deleteProject(_id)}></i>
                         <Link to={`/project/edit/${_id}`}>
                             <i className="fa-solid fa-pencil" ></i>
                         </Link>

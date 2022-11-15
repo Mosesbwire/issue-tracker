@@ -1,17 +1,19 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useState} from 'react'
 import PropTypes from 'prop-types'
 import List from '../list/List'
 
-const ProjectMembers = ({members}) => {
+
+const ProjectMembers = ({members, users:{users, loading}}) => {
     const [open, setOpen] = useState(false)
     const openList = ()=> setOpen(!open)
     const closeList =()=> setOpen(false)
+
   return (
     <Fragment>
         {   open ?
                 <Fragment>
                     <div className='overlay' onClick={closeList}></div>
-                    <List type={'checkbox'} closeList={closeList} legend={'Select people to add to project'} users={[{firstname: 'Moses', lastname: 'Bwire'}, {firstname: 'Mike', lastname: 'Gaunya'}]}/>
+                    <List type={'checkbox'} closeList={closeList} legend={'Select people to add to project'} users={users}/>
                 </Fragment>: null
         }
         
@@ -23,12 +25,15 @@ const ProjectMembers = ({members}) => {
 
             <div className="members-wrapper">
                 {members.length === 0 ? <p>This project currently has no members</p> : <Fragment>
-                    {members.map(member => (
-                        <div className="space-between member" key={member._id}>
+                    {members.map(member => {
+                        {!member.project &&(
+                            <div className="space-between member" key={member._id}>
                             <p>{`${member.firstname} ${member.lastname}`}</p>
                             <p>{member.role}</p>
                         </div>
-                    ))}
+                        )}
+                        
+                    })}
                     </Fragment>}
                 
                 
@@ -40,6 +45,9 @@ const ProjectMembers = ({members}) => {
 
 ProjectMembers.propTypes = {
     members: PropTypes.array.isRequired,
+    users: PropTypes.object.isRequired,    
 }
+
+
 
 export default ProjectMembers

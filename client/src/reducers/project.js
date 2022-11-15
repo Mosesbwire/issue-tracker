@@ -7,7 +7,8 @@ import {
     UPDATE_PROJECT,
     DELETE_PROJECT,
     PROJECT_ERROR,
-    CLEAR_PROJECT
+    CLEAR_PROJECT,
+    LOGOUT
 } from '../actions/types'
 
 const initialState = {
@@ -67,7 +68,7 @@ export default function(state = initialState, action){
                 projects: state.projects.filter(project => project._id !== payload ),
                 loading: false
             }
-    
+        
         default:
             return state;
     }

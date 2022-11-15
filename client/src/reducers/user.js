@@ -5,7 +5,8 @@ import {
     DELETE_USER,
     UPDATE_USER,
     USER_ERROR,
-    CLEAR_USER
+    CLEAR_USER,
+    LOGOUT
 } from '../actions/types'
 
 const initialState = {
@@ -25,14 +26,16 @@ export default function (state = initialState, action){
             return {
                 ...state,
                 users: payload,
-                loading: false
+                loading: false,
+                error: {}
             }
         case GET_USER:
         case UPDATE_USER:
             return {
                 ...state,
                 user: payload,
-                loading: false
+                loading: false,
+                error: {}
             }
         case CREATE_USER: 
             return {
@@ -40,7 +43,8 @@ export default function (state = initialState, action){
                 user: payload,
                 users: [payload, ...state.projects],
                 loading: false,
-                isCreated: true
+                isCreated: true,
+                error: {}
             }
         case DELETE_USER: 
             return {
@@ -58,8 +62,10 @@ export default function (state = initialState, action){
         case CLEAR_USER: 
             return {
                 ...state,
-                user: null
+                user: null,
+                error: {}
             }
+        
         default:
             return state;
     }
