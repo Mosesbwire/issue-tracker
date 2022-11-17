@@ -11,7 +11,7 @@ import ProjectDetails from './ProjectDetails'
 import ProjectMembers from './ProjectMembers'
 import Spinner from '../layout/Spinner'
 
-const Project = ({getProject, getUsers,project: {project, loading, members, issues}, users}) => {
+const Project = ({getProject, getUsers,path,project: {project, loading, members, issues}, users}) => {
     const { id } = useParams()
     useEffect(()=>{
         getProject(id)
@@ -21,8 +21,8 @@ const Project = ({getProject, getUsers,project: {project, loading, members, issu
       getUsers()
     }, [getUsers])
 
-    if(!loading && project === null ){
-      return <Navigate to ='/projects'/>
+    if(path === '/projects'){
+      return <Navigate to={path}/>
     }
   return project === null ? <Spinner/> : <Fragment>
     <main className='container'>
@@ -42,11 +42,13 @@ Project.propTypes = {
     getProject: PropTypes.func.isRequired,
     project: PropTypes.object.isRequired,
     users: PropTypes.object.isRequired,
+    path: PropTypes.string.isRequired,
 }
 
 const mapStateToProps = state => ({
     project: state.project,
-    users: state.user
+    users: state.user,
+    path: state.redirect.path
 })
 
 export default connect(mapStateToProps, {getProject, getUsers})(Project)

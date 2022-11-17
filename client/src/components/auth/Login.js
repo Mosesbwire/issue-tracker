@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Link, Navigate } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { login } from '../../actions/auth'
-const Login = ({login, isAuthenticated}) => {
+const Login = ({login, path}) => {
     const [formData, setFormData] = useState({
         email: '',
         password: ''
@@ -16,8 +16,8 @@ const Login = ({login, isAuthenticated}) => {
         login({email, password})
     }
 
-    if(isAuthenticated){
-        return <Navigate to='/dashboard'/>
+    if(path === '/dashboard'){
+        return <Navigate to={path}/>
     }
   return (
     <div className="login">
@@ -44,11 +44,11 @@ const Login = ({login, isAuthenticated}) => {
 
 Login.propTypes = {
     login: PropTypes.func.isRequired,
-    isAuthenticated: PropTypes.bool,
+    path: PropTypes.string.isRequired,
 }
 
 const mapStateToProps = state =>({
-    isAuthenticated: state.auth.isAuthenticated
+    path: state.redirect.path
 })
 
 export default connect(mapStateToProps, {login})(Login)

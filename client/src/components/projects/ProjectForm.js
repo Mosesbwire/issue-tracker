@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { Navigate } from 'react-router-dom'
 import { createProject } from '../../actions/project'
 
-const ProjectForm = ({createProject, project: {isCreated, project}}) => {
+const ProjectForm = ({createProject, project: {isCreated,project}, path}) => {
     const [formData, setFormData] = useState({
         title: '',
         description: '',
@@ -20,7 +20,7 @@ const ProjectForm = ({createProject, project: {isCreated, project}}) => {
     }
  
     if(isCreated){
-        return <Navigate to={`/project/${project._id}`}/>
+        return <Navigate to={path}/>
     }
 
   return (
@@ -52,10 +52,12 @@ const ProjectForm = ({createProject, project: {isCreated, project}}) => {
 
 ProjectForm.propTypes = {
     createProject: PropTypes.func.isRequired,
+    path: PropTypes.string.isRequired,
     project: PropTypes.object.isRequired,
 }
 
 const mapStateToProps = state => ({
+    path: state.redirect.path,
     project: state.project
 })
 
