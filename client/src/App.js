@@ -17,6 +17,10 @@ import Projects from './components/projects/Projects';
 import Project from './components/project/Project'
 import ProjectForm from './components/projects/ProjectForm'
 import Users from './components/users/Users';
+import UserForm from './components/users/UserForm';
+import IssueForm from './components/issues/IssueForm';
+import Issue from './components/issue/Issue'
+import Issues from './components/issues/Issues';
 
 if(localStorage.token){
   setAuthToken(localStorage.token)
@@ -41,6 +45,10 @@ const App = ()=> {
           <Route path= '/project/new' element={<AuthorizedRoute><ProjectForm/></AuthorizedRoute>}/>
           <Route path= '/project/:id' element={<PrivateRoute><Project/></PrivateRoute>}/>
           <Route path= '/users' element={<PrivateRoute><Users/></PrivateRoute>}/>
+          <Route path= '/users/new' element={<AuthorizedRoute><UserForm/></AuthorizedRoute>}/>
+          <Route path= '/issue/new' element={<PrivateRoute><IssueForm/></PrivateRoute>}/>
+          <Route path= '/issue/:id' element={<PrivateRoute><Issue/></PrivateRoute>}/>
+          <Route path= '/issues' element={<PrivateRoute><Issues/></PrivateRoute>}/>
         </Routes>
       </Fragment>
     </Router>

@@ -10,7 +10,7 @@ const createIssue = [
     check('summary', 'Issue summary  is required').not().isEmpty(),
     check('identifiedOn', 'Date issue is identified should be filled').not().isEmpty(),    
     check('priority', 'priority field is a required field').not().isEmpty(),
-    check('targetResolutionDate', 'Estimated date of issue resolution should be indicated').not().isEmpty(),
+    
    
 
     async(req,res) =>{

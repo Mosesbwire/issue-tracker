@@ -1,5 +1,6 @@
-import {GET_USER, GET_USERS, UPDATE_USER, CREATE_USER, DELETE_USER, CLEAR_USER,USER_ERROR} from './types'
+import {GET_USER, GET_USERS, UPDATE_USER, CREATE_USER, DELETE_USER, CLEAR_USER,USER_ERROR, REDIRECT} from './types'
 import {setAlert} from './alert'
+import { redirect } from './redirect'
 import axios from 'axios'
 
 export const createUser = (formData) => async dispatch => {
@@ -10,15 +11,21 @@ export const createUser = (formData) => async dispatch => {
     }
 
     try {
-        const res = await axios.post('api/users',formData, config)
+        const res = await axios.post('/api/users',formData, config)
 
         dispatch({
             type: CREATE_USER,
             payload: res.data
         })
 
+        dispatch({
+            type: REDIRECT,
+            payload: '/users'
+        })
+
         dispatch(setAlert('User successfully created.' , 'success'))
     } catch (err) {
+        
         const errors = err.response.data.errors
         if(errors){
             errors.forEach(error => dispatch(setAlert(error.msg, 'danger')))
@@ -32,7 +39,7 @@ export const createUser = (formData) => async dispatch => {
 
 export const getUsers = ()=> async dispatch => {
     try {
-        const res = await axios.get('api/users')
+        const res = await axios.get('/api/users')
         dispatch({
             type: GET_USERS,
             payload: res.data
@@ -47,7 +54,7 @@ export const getUsers = ()=> async dispatch => {
 
 export const getUser = (userId)=> async dispatch => {
     try {
-        const res = await axios.get(`api/users/${userId}`)
+        const res = await axios.get(`/api/users/${userId}`)
         dispatch({
             type: GET_USER,
             payload: res.data
@@ -68,7 +75,7 @@ export const editUser = (formData, userId) => async dispatch => {
     }
 
     try {
-        const res = await axios.put(`api/users/${userId}`, formData, config)
+        const res = await axios.put(`/api/users/${userId}`, formData, config)
         dispatch({
             type: UPDATE_USER,
             payload: res.data
@@ -89,7 +96,7 @@ export const editUser = (formData, userId) => async dispatch => {
 
 export const deleteUser = (userId) => async dispatch => {
     try {
-        const res = await axios.delete(`api/users/delete/${userId}`)
+        const res = await axios.delete(`/api/users/delete/${userId}`)
 
         dispatch({
             type: DELETE_USER,

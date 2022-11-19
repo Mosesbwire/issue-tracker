@@ -9,8 +9,9 @@ const ProjectActions = ({closeProject,deleteProject, user}) => {
   
   return (
     <div className="flex-container">
-      
-        <button className="btn-primary project-btn">Open Issue</button>
+        <Link to='/issue/new'>
+          <button className="btn-primary project-btn">Open Issue</button>
+        </Link>
         {user.role ==='Manager' && (<Fragment>
 
           <button className="btn-primary">Edit Project</button>

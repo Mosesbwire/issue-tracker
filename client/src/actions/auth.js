@@ -1,6 +1,7 @@
 import axios from 'axios'
 import setAuthToken from '../utils/setAuthToken';
 import { setAlert } from './alert'
+import { redirect } from './redirect'
 import { LOGIN_FAIL, LOGIN_SUCCESS, LOGOUT, AUTH_ERROR, USER_LOADED, RESET_PASSWORD_FAIL, RESET_PASSWORD_SUCCESS } from "./types";
 
 export const loadUser = ()=> async dispatch => {
@@ -38,6 +39,7 @@ export const login = ({email, password})=> async dispatch => {
         })
 
         dispatch(loadUser())
+        dispatch(redirect('/dashboard'))
         
     } catch (err) {
         const errors = err.response.data.errors

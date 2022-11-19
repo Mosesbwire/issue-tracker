@@ -11,15 +11,15 @@ const ProjectMetrics = ({issues}) => {
         </div>
         <div className="detail-card">
             <p>Open Issues</p>
-            <p>{issues.map(issue => issue.status === 'Open').length}</p>
+            <p>{issues.filter(issue => issue.status === 'Open').length}</p>
         </div>
         <div className="detail-card">
             <p>Unassigned Issues</p>
-            <p>{issues.map(issue => issue.status === 'Unassigned').length}</p>  
+            <p>{issues.filter(issue => issue.status === 'Unassigned').length}</p>  
         </div>
         <div className="detail-card">
         <p>Solved Issues</p>
-        <p>{issues.map(issue => issue.status === 'Closed').length}</p>  
+        <p>{issues.filter(issue => issue.status === 'Closed').length}</p>  
         </div>
         </div>
     </div>

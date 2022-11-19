@@ -1,5 +1,6 @@
 import { GET_PROJECT, GET_PROJECTS, PROJECT_ERROR, CREATE_PROJECT, UPDATE_PROJECT, DELETE_PROJECT, CLEAR_PROJECT } from './types';
 import { setAlert } from './alert'
+import { redirect } from './redirect'
 import axios from 'axios';
 
 export const getProjects = () => async dispatch => {
@@ -19,6 +20,7 @@ export const getProjects = () => async dispatch => {
 }
 
 export const getProject = (id)=> async dispatch => {
+    
     try {
         const res = await axios.get(`/api/project/${id}`)
 
@@ -26,6 +28,8 @@ export const getProject = (id)=> async dispatch => {
             type: GET_PROJECT,
             payload: res.data
         })
+
+        
     } catch (err) {
         dispatch({
             type: PROJECT_ERROR,
@@ -47,12 +51,14 @@ export const createProject = (formData)=> async dispatch => {
 
     try {
         const res = await axios.post('/api/project', formData, config)
-
+        
         dispatch({
             type: CREATE_PROJECT,
             payload: res.data
         })
 
+
+        dispatch(redirect(`/project/${res.data._id}`))
         dispatch(setAlert('Project was successfully created.', 'success'))
     } catch (err) {
         const errors = err.response.data.errors
@@ -213,6 +219,8 @@ export const deleteProject = (projectId) => async dispatch => {
                 type: DELETE_PROJECT,
                 payload: projectId
             })
+
+            dispatch(redirect('/projects'))
 
             dispatch(setAlert('Project removed.', 'success'))
         } catch (err) {

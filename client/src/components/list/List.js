@@ -1,10 +1,16 @@
-import React, {Fragment} from 'react'
+import React, {Fragment, useState} from 'react'
 import PropTypes from 'prop-types'
 
-const List = ({type, legend,users, closeList}) => {
-    const onSubmit = e => {
+
+
+
+
+const List = ({type, legend,users}) => {
+
+    
+    const onSubmit = async e => {
         e.preventDefault()
-        closeList()
+
     }
   return (
     <div className=' atop-overlay'>
@@ -27,8 +33,7 @@ const List = ({type, legend,users, closeList}) => {
 List.propTypes = {
     type: PropTypes.string,
     legend: PropTypes.string,
-    closeList: PropTypes.func.isRequired,
-    users: PropTypes.array.isRequired,
+    users: PropTypes.array.isRequired,  
 }
 
 export default List

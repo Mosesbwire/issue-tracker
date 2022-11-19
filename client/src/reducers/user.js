@@ -41,7 +41,7 @@ export default function (state = initialState, action){
             return {
                 ...state,
                 user: payload,
-                users: [payload, ...state.projects],
+                users: [payload, ...state.users],
                 loading: false,
                 isCreated: true,
                 error: {}
