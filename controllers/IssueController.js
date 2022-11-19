@@ -253,7 +253,7 @@ const getIssue = async (req,res)=>{
 
 const getAllIssues = async(req,res)=>{
     try {
-        const issues = await Issue.find({})
+        const issues = await Issue.find({}).populate('project').populate('assignedTo')
         res.json(issues)
     } catch (err) {
         console.error(err.message)
