@@ -1,8 +1,10 @@
 import React, { Fragment, useEffect } from 'react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 import './App.css';
-import store from './store'
+import  {store, persistor} from './store'
+
 import { loadUser } from './actions/auth'
 import setAuthToken from './utils/setAuthToken'
 import Navbar from './components/layout/Navbar';
@@ -32,26 +34,28 @@ const App = ()=> {
   }, [])
   return (
   <Provider store={store}>
-    <Router>
-      <Fragment>
-        <Navbar/>
-        <Alert/>
-        <Routes>
-          <Route path='/' element={<Login/>}/>
-          <Route path='/reset-password' element={<ResetPassword/>}/>
-          <Route path= '/set-password' element={<SetPassword/>}/>
-          <Route path= '/dashboard' element={<PrivateRoute><Dashboard/></PrivateRoute>}/>
-          <Route path= '/projects' element={<PrivateRoute><Projects/></PrivateRoute>}/>
-          <Route path= '/project/new' element={<AuthorizedRoute><ProjectForm/></AuthorizedRoute>}/>
-          <Route path= '/project/:id' element={<PrivateRoute><Project/></PrivateRoute>}/>
-          <Route path= '/users' element={<PrivateRoute><Users/></PrivateRoute>}/>
-          <Route path= '/users/new' element={<AuthorizedRoute><UserForm/></AuthorizedRoute>}/>
-          <Route path= '/issue/new' element={<PrivateRoute><IssueForm/></PrivateRoute>}/>
-          <Route path= '/issue/:id' element={<PrivateRoute><Issue/></PrivateRoute>}/>
-          <Route path= '/issues' element={<PrivateRoute><Issues/></PrivateRoute>}/>
-        </Routes>
-      </Fragment>
-    </Router>
+    <PersistGate loading={null} persistor={persistor}>
+      <Router>
+        <Fragment>
+          <Navbar/>
+          <Alert/>
+          <Routes>
+            <Route path='/' element={<Login/>}/>
+            <Route path='/reset-password' element={<ResetPassword/>}/>
+            <Route path= '/set-password' element={<SetPassword/>}/>
+            <Route path= '/dashboard' element={<PrivateRoute><Dashboard/></PrivateRoute>}/>
+            <Route path= '/projects' element={<PrivateRoute><Projects/></PrivateRoute>}/>
+            <Route path= '/project/new' element={<AuthorizedRoute><ProjectForm/></AuthorizedRoute>}/>
+            <Route path= '/project/:id' element={<PrivateRoute><Project/></PrivateRoute>}/>
+            <Route path= '/users' element={<PrivateRoute><Users/></PrivateRoute>}/>
+            <Route path= '/users/new' element={<AuthorizedRoute><UserForm/></AuthorizedRoute>}/>
+            <Route path= '/issue/new' element={<PrivateRoute><IssueForm/></PrivateRoute>}/>
+            <Route path= '/issue/:id' element={<PrivateRoute><Issue/></PrivateRoute>}/>
+            <Route path= '/issues' element={<PrivateRoute><Issues/></PrivateRoute>}/>
+          </Routes>
+        </Fragment>
+      </Router>
+    </PersistGate>
   </Provider>
 
 )}
