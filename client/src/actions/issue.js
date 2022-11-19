@@ -38,7 +38,7 @@ export const createIssue = (formData, projectId) => async dispatch => {
 export const getIssues = ()=> async dispatch => {
     try {
         const res = await axios.get('/api/issue')
-
+        
         dispatch({
             type: GET_ISSUES,
             payload: res.data

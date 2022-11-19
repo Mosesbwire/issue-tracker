@@ -1,14 +1,16 @@
-import React, {useEffect} from 'react'
+import React, {Fragment, useEffect} from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import IssueItem from './IssueItem'
 import {getIssues} from '../../actions/issue'
+import Spinner from '../layout/Spinner'
 
-const Issues = ({issues}) => {
+const Issues = ({getIssues,issue : {loading, issues}}) => {
     useEffect(()=>{
+        
         getIssues()
     }, [getIssues])
-  return (
+  return loading ? <Spinner/> : <Fragment>
     <main>
       <div className='container projects'>
         <button className="btn-primary project-btn">Unassigned Issues (10)</button>
@@ -22,25 +24,24 @@ const Issues = ({issues}) => {
                 <p>Actions <span className="filter-btn"><i className="fa-solid fa-filter"></i></span></p>
             </div>
             <div className='project-container'>
-                {issues.map(issue => (
-                    <div key={issue._id} className='project projects-grid'>
-                        <IssueItem/>
-                    </div> 
-                ))}
+                {!loading && issues.length > 0 ? (<Fragment>
+                    {issues.map(issue => (<div key={issue._id} className='project projects-grid'><IssueItem  issue={issue}/></div>))}
+                </Fragment>) : (<p>No issues available</p>)}
             </div>
         </div>
 
       </div>
     </main>
-  )
+  </Fragment>
+
 }
 
 Issues.propTypes = {
-    issues: PropTypes.array.isRequired,
+    issue: PropTypes.object.isRequired,
 }
 
 const mapStateToProps = state => ({
-    issues: state.issue.issues
+    issue: state.issue
 })
 
 export default connect(mapStateToProps, {getIssues})(Issues)
