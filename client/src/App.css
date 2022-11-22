@@ -83,6 +83,11 @@ a {
 
 }
 
+fieldset {
+    margin-bottom: 1em;
+    border: 0;
+}
+
 /* Remove all animations, transitions and smooth scroll for people that prefer not to see them */
 @media (prefers-reduced-motion: reduce) {
   html:focus-within {
@@ -202,10 +207,7 @@ a {
 
 }
 
-.list > fieldset {
-    margin-bottom: 1em;
-    border: 0;
-}
+
 
 .atop-overlay {
     position: relative;
@@ -228,6 +230,20 @@ a {
     right: 0;
     background-color: rgba(0, 0, 0, .6);
     z-index: 20;
+}
+
+
+
+.overlay-item {
+    position: relative;
+    width: 30%;
+    padding-block: 1em;
+    padding-inline: 2em;
+    z-index: 21;
+    background-color: var(--bg-light);
+    color: var(--primary-text);
+    left: 40%;
+    top: 20%;
 }
 
 
@@ -569,7 +585,7 @@ body{
     cursor: pointer;
 }
 
-.unassigned {
+.Unassigned {
     border-left: 4px solid salmon;
 }
 

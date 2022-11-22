@@ -12,8 +12,38 @@ const Issues = ({getIssues,issue : {loading, issues}}) => {
         getIssues()
     }, [getIssues])
 
-    const [path , setPath ] = useState('')
+    
 
+    const [path , setPath ] = useState('')
+    const [openFilter, setFilter] = useState(false)
+    const issueStatus = ['All','Open', 'Closed', 'Unassigned']
+    const [filterQuery, setFilterQuery] = useState('All')
+    const [issueItems, setIssues] = useState(issues)
+
+    useEffect(()=>{
+      setIssues(()=>{
+        if(filterQuery === 'All'){
+          return issues
+        }
+        return issues.filter(issue => issue.status === filterQuery)
+      })
+    }, [filterQuery, issues])
+
+    
+    const closeFilter = (e) => {
+      if(e.target.classList.contains('overlay') ){
+          setFilter(false)
+      }
+    }
+
+    const filterValues = (e)=> {
+      setFilterQuery(e.target.value)
+      setFilter(false)
+    }
+
+    
+
+    
     const navigateToIssuePage = (e) => {
       if(!e.target.dataset.id){
         let id = e.target.parentElement.dataset.id
@@ -23,11 +53,30 @@ const Issues = ({getIssues,issue : {loading, issues}}) => {
       }
     }
 
+    
     if(path) {
       return <Navigate to={`/issue/${path}`}/>
     }
   return loading ? <Spinner/> : <Fragment>
     <main>
+      <Fragment>
+        { openFilter ? <div className='overlay' onClick={e => closeFilter(e)}>
+            <div className='filter-container overlay-item'>
+              <p>Filter By</p>
+              <fieldset>
+                {issueStatus.map((status,index) => (<div key={index}>
+                    <div className='space-between'>
+                      <label htmlFor='open'>{status}</label>
+                      <input type='checkbox' value={status} name={status} onChange={e => filterValues(e)}/>
+                    </div>
+                </div>))}
+              </fieldset>
+              <button className='btn-primary'>Apply</button>
+            </div>
+          </div> : null}
+        
+      </Fragment>
+
       <div className='container projects'>
         <button className="btn-primary project-btn">Unassigned Issues <Fragment>{issues.filter(issue => issue.status === 'Unassigned').length}</Fragment> <i className='fa-solid fa-angle-right'></i></button>
         <div className='projects-wrapper'>
@@ -37,12 +86,12 @@ const Issues = ({getIssues,issue : {loading, issues}}) => {
                 <p>Assinged On</p>
                 <p>Assinged To</p>
                 <p>Project</p>
-                <p>Actions <span className="filter-btn"><i className="fa-solid fa-filter"></i></span></p>
+                <p>Actions <span className="filter-btn"><i className="fa-solid fa-filter" onClick={e => setFilter(true)}></i></span></p>
 
             </div>
             <div className='project-container'>
                 {!loading && issues.length > 0 ? (<Fragment>
-                    {issues.map(issue => (<div key={issue._id} data-id={issue._id} className='project projects-grid' onClick={e => navigateToIssuePage(e)}><IssueItem  issue={issue}/></div>))}
+                    {issueItems.map(issue => (<div key={issue._id} data-id={issue._id} className={`project projects-grid ${issue.status}`} onClick={e => navigateToIssuePage(e)}><IssueItem  issue={issue}/></div>))}
                 </Fragment>) : (<p>No issues available</p>)}
             </div>
         </div>
