@@ -4,46 +4,80 @@ import { connect } from 'react-redux'
 import { Navigate } from 'react-router-dom'
 import IssueItem from './IssueItem'
 import {getIssues} from '../../actions/issue'
+import { getProjects } from '../../actions/project'
 import Spinner from '../layout/Spinner'
 
-const Issues = ({getIssues,issue : {loading, issues}}) => {
-    useEffect(()=>{
-        
-        getIssues()
-    }, [getIssues])
-
-    
-
+const Issues = ({getIssues,getProjects,issue : {loading, issues}, project}) => {
     const [path , setPath ] = useState('')
     const [openFilter, setFilter] = useState(false)
-    const issueStatus = ['All','Open', 'Closed', 'Unassigned']
-    const [filterQuery, setFilterQuery] = useState('All')
-    const [issueItems, setIssues] = useState(issues)
+    const issueStatus = ['Open', 'Closed', 'Unassigned']
+    const [items, setItems] = useState(issues)
+    const [filterParams, setFilterParams ] = useState([])
+    const [selectedProject, setProject] = useState('')
 
     useEffect(()=>{
-      setIssues(()=>{
-        if(filterQuery === 'All'){
-          return issues
-        }
-        return issues.filter(issue => issue.status === filterQuery)
-      })
-    }, [filterQuery, issues])
+      
+      getIssues()
+    }, [getIssues])
+    
+    useEffect(()=>{
+      
+      getProjects()
+    }, [getProjects])
 
+
+    const filterIssues = ()=> {
+      
+      setFilter(false)
+      let storeIssues = []
+      if(selectedProject.length === 0 && filterParams.length === 0){
+         return setItems(issues)
+      }
+
+      if(selectedProject.length > 0 && filterParams.length === 0){
+        return setItems(()=>{
+          return issues.filter(issue => issue.project._id === selectedProject)
+        })
+      }
+
+      if(selectedProject.length > 0 && filterParams.length > 0){
+          let arr = issues.filter(issue => issue.project._id === selectedProject)
+          filterParams.forEach(param => {
+            arr.forEach(item => {
+              if(item.status === param){
+                storeIssues.push(item)
+              }
+            })
+          })
+
+          return setItems(storeIssues)
+      }
+
+      if(selectedProject.length === 0 && filterParams.length > 0) {
+        
+        filterParams.forEach(param => {
+          issues.forEach(issue => {
+            if(issue.status === param){
+              storeIssues.push(issue)
+            }
+          })
+        })
+
+        return setItems(storeIssues)
+      }
+
+    }
+    
+    const getParams = e => setFilterParams([...filterParams, e.target.value])
     
     const closeFilter = (e) => {
-      if(e.target.classList.contains('overlay') ){
+      if(e.target.classList.contains('overlay') || e.target.classList.contains('close-btn') ){
           setFilter(false)
+          setFilterParams([])
+          setProject('')
       }
     }
 
-    const filterValues = (e)=> {
-      setFilterQuery(e.target.value)
-      setFilter(false)
-    }
-
-    
-
-    
     const navigateToIssuePage = (e) => {
       if(!e.target.dataset.id){
         let id = e.target.parentElement.dataset.id
@@ -67,11 +101,22 @@ const Issues = ({getIssues,issue : {loading, issues}}) => {
                 {issueStatus.map((status,index) => (<div key={index}>
                     <div className='space-between'>
                       <label htmlFor='open'>{status}</label>
-                      <input type='checkbox' value={status} name={status} onChange={e => filterValues(e)}/>
+                      <input type='checkbox' value={status} name={status} onChange={e => getParams(e)}/>
                     </div>
                 </div>))}
+                <Fragment>
+                      <label>Project</label>
+                      {(!project.loading || project.projects.length > 0) && (
+                        
+                        <select value={selectedProject} onChange={e => setProject(e.target.value)}>
+                          {project.projects.map(prj => (
+                            <option key={prj._id} value={prj._id}>{prj.title}</option>
+                          ))}
+                        </select>
+                      )}
+                    </Fragment>
               </fieldset>
-              <button className='btn-primary'>Apply</button>
+              <button className='btn-primary close-btn' onClick={e => filterIssues()}>Apply</button>
             </div>
           </div> : null}
         
@@ -91,7 +136,7 @@ const Issues = ({getIssues,issue : {loading, issues}}) => {
             </div>
             <div className='project-container'>
                 {!loading && issues.length > 0 ? (<Fragment>
-                    {issueItems.map(issue => (<div key={issue._id} data-id={issue._id} className={`project projects-grid ${issue.status}`} onClick={e => navigateToIssuePage(e)}><IssueItem  issue={issue}/></div>))}
+                    {items.map(issue => (<div key={issue._id} data-id={issue._id} className={`project projects-grid ${issue.status}`} onClick={e => navigateToIssuePage(e)}><IssueItem  issue={issue}/></div>))}
                 </Fragment>) : (<p>No issues available</p>)}
             </div>
         </div>
@@ -104,10 +149,13 @@ const Issues = ({getIssues,issue : {loading, issues}}) => {
 
 Issues.propTypes = {
     issue: PropTypes.object.isRequired,
+    getIssues: PropTypes.func.isRequired,
+    getProjects: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
-    issue: state.issue
+    issue: state.issue,
+    project: state.project
 })
 
-export default connect(mapStateToProps, {getIssues})(Issues)
+export default connect(mapStateToProps, {getIssues, getProjects})(Issues)
