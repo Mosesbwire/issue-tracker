@@ -27,4 +27,6 @@ export const CLEAR_USER = 'CLEAR_USER'
 export const CREATE_ISSUE = 'CREATE_ISSUE'
 export const ISSUE_ERROR = 'ISSUE_ERROR'
 export const GET_ISSUES = 'GET_ISSUES'
+export const GET_ISSUE = 'GET_ISSUE'
+
 

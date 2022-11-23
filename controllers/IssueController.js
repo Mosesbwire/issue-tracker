@@ -235,7 +235,7 @@ const editIssue = [
 
 const getIssue = async (req,res)=>{
     try {
-        const issue = await Issue.findById(req.params.id)
+        const issue = await Issue.findById(req.params.id).populate('project').populate('assignedTo')
         if(!issue){
             return res.status(400).json({msg: 'Issue does not exist'})
         }

@@ -1,4 +1,4 @@
-import {CREATE_ISSUE, ISSUE_ERROR, GET_ISSUES} from './types'
+import {CREATE_ISSUE, ISSUE_ERROR, GET_ISSUES, GET_ISSUE} from './types'
 import axios from 'axios'
 import { setAlert } from './alert'
 import { redirect } from './redirect'
@@ -48,6 +48,23 @@ export const getIssues = ()=> async dispatch => {
         dispatch({
             type: ISSUE_ERROR,
             payload: {msg: err.response.statusText, status: err.response.status}
+        })
+    }
+}
+
+export const getIssueById = (id)=> async dispatch => {
+    
+    try {
+        const res = await axios.get(`/api/issue/${id}`)
+        
+        dispatch({
+            type: GET_ISSUE,
+            payload: res.data
+        })
+    }catch(err){
+        dispatch({
+            type: ISSUE_ERROR,
+            payload: {msg: err.response.statusText,status: err.response.status}
         })
     }
 }
