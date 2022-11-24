@@ -29,4 +29,8 @@ export const ISSUE_ERROR = 'ISSUE_ERROR'
 export const GET_ISSUES = 'GET_ISSUES'
 export const GET_ISSUE = 'GET_ISSUE'
 
+export const GET_ISSUE_REPORT = 'GET_ISSUE_REPORT'
+export const GET_ISSUE_REPORT_ERROR = 'GET_ISSUE_REPORT_ERROR'
+
+
 
