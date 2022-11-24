@@ -12,6 +12,7 @@ app.use('/api/users', require('./routes/UserRoutes'))
 app.use('/api/auth', require('./routes/AuthenticationRoute'))
 app.use('/api/project', require('./routes/ProjectRoutes'))
 app.use('/api/issue', require('./routes/IssueRoutes'))
+app.use('/api/issuereport', require('./routes/IssueReport'))
 
 
 
