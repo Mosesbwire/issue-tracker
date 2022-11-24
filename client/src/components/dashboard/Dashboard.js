@@ -2,6 +2,7 @@ import React, { Fragment } from 'react'
 import PropTypes  from 'prop-types'
 import { connect } from 'react-redux'
 import Aside from './Aside'
+import BarChartContainer from './BarChartContainer'
 import Spinner from '../layout/Spinner'
 
 const Dashboard = ({auth: {user, loading}}) => {
@@ -10,6 +11,7 @@ const Dashboard = ({auth: {user, loading}}) => {
         <main className='grid-container'>
 
           <Aside user={user}/>
+          <BarChartContainer/>
         </main>
     </Fragment>
     
